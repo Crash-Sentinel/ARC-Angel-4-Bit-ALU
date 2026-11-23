@@ -37,7 +37,7 @@ module tt_um_bennett_miller_4_bit_arc_angel_alu (
   wire [3:0] b = ui_in[3:0];
   wire [3:0] opcode = uio_in[3:0];
 
-  reg [7:0] counter = 8'h0; // internal counter for random numbers
+  reg [7:0] counter = 8'h01; // internal counter for random numbers
   wire [7:0] random_output;
 
   wire [4:0] add_result;
@@ -95,10 +95,10 @@ module tt_um_bennett_miller_4_bit_arc_angel_alu (
 
   always @(posedge clk or negedge rst_n) begin
     if (!rst_n) begin
-      result <= 8'h0;
+      result <= 8'h00;
       carry_out <= 2'b00;
       overflow <= 2'b00;
-      counter <= 8'h00;
+      counter <= 8'h01;
     end else begin
       case (opcode)
         ADD: begin
@@ -207,7 +207,7 @@ module tt_um_bennett_miller_4_bit_arc_angel_alu (
         end
       endcase
 
-      counter <= counter + 1;
+      counter <= random_output;
     end
   
   end
