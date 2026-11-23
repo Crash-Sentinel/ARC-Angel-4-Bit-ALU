@@ -72,10 +72,11 @@ module tt_um_bennett_miller_4_bit_arc_angel_alu (
   reg [1:0] carry_out;
   reg [1:0] overflow;
 
-  // pseudo-random algorithm
-  wire [9:0] temp_random_result;
-  assign temp_random_result = {2'b00, counter} + {6'b0000, a} + {6'b0000, b}; 
-  assign random_output = temp_random_result[7:0];
+  // pseudo-random algorithm using linear shiftback registers
+  // maximal length feedback taps
+  wire feedback_tap;
+  assign feedback_tap = counter[7] ^ counter[5] ^ counter[4] ^ counter[3];
+  assign random_output = {counter[6:0], feedback_tap};
 
   assign add_result = a + b;
 
@@ -126,38 +127,56 @@ module tt_um_bennett_miller_4_bit_arc_angel_alu (
         
         AND: begin
           result <= {4'b0000, and_result};
+          carry_out <= 2'b00;
+          overflow <= 2'b00;
         end
 
         OR: begin
           result <= {4'b0000, or_result};
+          carry_out <= 2'b00;
+          overflow <= 2'b00;
         end
         
         XOR: begin
           result <= {4'b0000, xor_result};
+          carry_out <= 2'b00;
+          overflow <= 2'b00;
         end
 
         NOT: begin
           result <= {not_result_a, not_result_b};
+          carry_out <= 2'b00;
+          overflow <= 2'b00;
         end
 
         RAND: begin
           result <= random_output;
+          carry_out <= 2'b00;
+          overflow <= 2'b00;
         end
 
         NAND: begin
           result <= {4'b0000, nand_result};
+          carry_out <= 2'b00;
+          overflow <= 2'b00;
         end
 
         NOR: begin
           result <= {4'b0000, nor_result};
+          carry_out <= 2'b00;
+          overflow <= 2'b00;
         end
 
         LEFTSHIFT: begin
           result <= {leftshift_result_a, leftshift_result_b};
+          carry_out <= 2'b00;
+          overflow <= 2'b00;
         end
 
         RIGHTSHIFT: begin
           result <= {rightshift_result_a, rightshift_result_b};
+          carry_out <= 2'b00;
+          overflow <= 2'b00;
         end
 
         INCREMENT: begin
@@ -177,6 +196,8 @@ module tt_um_bennett_miller_4_bit_arc_angel_alu (
              {a[2:0], a[3]},
              {b[2:0], b[3]} 
             };
+          carry_out <= 2'b00;
+          overflow <= 2'b00;
         end
         
         default: begin
