@@ -28,7 +28,7 @@ module tb ();
 `endif
 
   // Replace tt_um_example with your module name:
-  tt_um_bennett_miller_4_bit_arc_angel_alu (
+  tt_um_bennett_miller_4_bit_arc_angel_alu uut (
 
       // Include power ports for the Gate Level test:
 `ifdef GL_TEST
