@@ -3,12 +3,13 @@
 
 import cocotb
 from cocotb.clock import Clock
-from cocotb.triggers import ClockCycles, Timer, RisingEdge
-
+from cocotb.triggers import ClockCycles, Timer, RisingEdge, FallingEdge
 
 async def apply_operation(dut, a, b, opcode):
-    dut.ui_in.value = (a << 4) | b
-    dut.uio_in.value = opcode
+    await RisingEdge(dut.clk)
+    
+    dut.ui_in.value = ((a & 0xF) << 4) | (b & 0xF)
+    dut.uio_in.value = opcode & 0xF
 
     await RisingEdge(dut.clk)
 
@@ -30,31 +31,30 @@ async def test_arc_angel_alu(dut):
     dut.ui_in.value = 0
     dut.uio_in.value = 0
     dut.rst_n.value = 0
+
     await ClockCycles(dut.clk, 10)
+
+    await FallingEdge(dut.clk)
     dut.rst_n.value = 1
+
+    dut._log.info("Reset complete")
 
     dut._log.info("Test project behavior")
 
-    # Set the input values you want to test
-    # dut.ui_in.value = 20
-    # dut.uio_in.value = 30
+    result = await apply_operation(dut, 5, 3, 0)
+    dut._log.info(f"Add: 5 + 3 {result}")
+    assert result == 8
 
-    # Wait for one clock cycle to see the output values
-    # await ClockCycles(dut.clk, 1)
+    result = await apply_operation(dut, 5, 3, 2)
+    dut._log.info(f"Mult: 5 * 3 = {result}")
+    assert result == 15
 
-    # The following assersion is just an example of how to check the output values.
-    # Change it to match the actual expected output of your module:
-    # assert dut.uo_out.value == 50
+    result = await apply_operation(dut, 13, 3, 3)
+    dut._log.info(f"Div: 13 / 3 = {hex(result)}")
+    assert result == 0x14
 
-    # Keep testing the module by changing the input values, waiting for
-    # one or more clock cycles, and asserting the expected output values.
-
-    assert await apply_operation(dut, 5, 3, 0) == 8
-
-    assert await apply_operation(dut, 5, 3, 2) == 15
-
-    assert await apply_operation(dut, 13, 3, 3) == 0x14
-
-    assert await apply_operation(dut, 9, 0, 15) == 0x30
+    result = await apply_operation(dut, 9, 0, 15)
+    dut._log.info(f"Rotate: 9 -> {hex(result)}")
+    assert result == 0x30
 
     dut._log.info("ALU basic tests passed!")
