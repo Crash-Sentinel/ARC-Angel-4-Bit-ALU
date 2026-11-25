@@ -15,6 +15,14 @@ async def apply_operation(dut, a, b, opcode):
 
     await Timer(1, unit="ns")
 
+    # Diagnosis because I'm not too sure what I'm doing wrong
+    # in my github actions
+    dut._log.info(f"ui_in = {dut.ui_in.value}")
+    dut._log.info(f"uio_in = {dut.uio_in.value}")
+    dut._log.info(f"clk = {dut.clk.value}")
+    dut._log.info(f"rst_n = {dut.rst_n.value}")
+    dut._log.info(f"uo_out = {dut.uo_out.value}")
+
     return int(dut.uo_out.value)
 
 @cocotb.test()
