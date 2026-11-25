@@ -17,11 +17,19 @@ async def apply_operation(dut, a, b, opcode):
 
     # Diagnosis because I'm not too sure what I'm doing wrong
     # in my github actions
-    dut._log.info(f"ui_in = {dut.ui_in.value}")
-    dut._log.info(f"uio_in = {dut.uio_in.value}")
-    dut._log.info(f"clk = {dut.clk.value}")
-    dut._log.info(f"rst_n = {dut.rst_n.value}")
-    dut._log.info(f"uo_out = {dut.uo_out.value}")
+    dut._log.info(f"TB: ui_in = {dut.ui_in.value}")
+    dut._log.info(f"uut: ui_in = {dut.uut.ui_in.value}")
+
+
+    dut._log.info(f"TB: uio_in = {dut.uio_in.value}")
+    dut._log.info(f"uut: ui_in = {dut.uut.ui_in.value}")
+
+    dut._log.info(f"uut: clk = {dut.uut.clk.value}")
+    
+    dut._log.info(f"uut: rst_n = {dut.rst_n.value}")
+
+    dut._log.info(f"TB uo_out = {dut.uo_out.value}")
+    dut._log.info(f"uut: uo_out = {dut.uut.uo_out.value}")
 
     return int(dut.uo_out.value)
 
