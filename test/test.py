@@ -22,7 +22,7 @@ async def apply_operation(dut, a, b, opcode):
 
 
     dut._log.info(f"TB: uio_in = {dut.uio_in.value}")
-    dut._log.info(f"uut: ui_in = {dut.uut.ui_in.value}")
+    dut._log.info(f"uut: uio_in = {dut.uut.uio_in.value}")
 
     dut._log.info(f"uut: clk = {dut.uut.clk.value}")
     
@@ -31,7 +31,7 @@ async def apply_operation(dut, a, b, opcode):
     dut._log.info(f"TB uo_out = {dut.uo_out.value}")
     dut._log.info(f"uut: uo_out = {dut.uut.uo_out.value}")
 
-    return int(dut.uo_out.value)
+    return int(dut.uo_out.value, 2) # I think I need to change the base here
 
 @cocotb.test()
 async def test_arc_angel_alu(dut):
