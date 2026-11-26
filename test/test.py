@@ -61,22 +61,22 @@ async def test_arc_angel_alu(dut):
     result = await apply_operation(dut, 5, 3, 0)
     dut._log.info(f"Add: 5 + 3 {result}")
     dut._log.info(f"Type of result") 
-    await Timer(1, unit="ns") # I think its a delay, it shows up correct on the gtkwave form
+    await Timer(1, unit="us") # I think its a delay, it shows up correct on the gtkwave form
     assert result == 8
 
     result = await apply_operation(dut, 5, 3, 2)
     dut._log.info(f"Mult: 5 * 3 = {result}")
-    await Timer(1, unit="ns")
+    await Timer(1, unit="us")
     assert result == 15
 
     result = await apply_operation(dut, 13, 3, 3)
     dut._log.info(f"Div: 13 / 3 = {hex(result)}")
-    await Timer(1, unit="ns")
+    await Timer(1, unit="us")
     assert result == 0x14
 
     result = await apply_operation(dut, 9, 0, 15)
     dut._log.info(f"Rotate: 9 -> {hex(result)}")
-    await Timer(1, unit="ns")
+    await Timer(1, unit="us")
     assert result == 0x30
 
     dut._log.info("ALU basic tests passed!")
