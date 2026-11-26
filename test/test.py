@@ -31,7 +31,8 @@ async def apply_operation(dut, a, b, opcode):
     dut._log.info(f"TB uo_out = {dut.uo_out.value}")
     dut._log.info(f"uut: uo_out = {dut.uut.uo_out.value}")
 
-    return int(dut.uo_out.value, 2) # I think I need to change the base here
+    return int(str(dut.uo_out.value), 2) # I think I need to change the base here
+    #needed it to be a string
 
 @cocotb.test()
 async def test_arc_angel_alu(dut):
